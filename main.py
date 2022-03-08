@@ -23,7 +23,7 @@ class PasswordManager:
 
         if initial is not None:
             for key, value in initial.items():
-                pass  # TODO PASSWORD FUNCTION
+                self.add_password(key, value)
 
     def load_pass_file(self, path):
         self.password_file = path
@@ -33,3 +33,25 @@ class PasswordManager:
                 site, encrypted = line.split(':')
                 self.passowrd_dict[site] = Fernet(
                     self.key).decrypt(encrypted.encode()).decode()
+
+    def add_password(self, site, password):
+        self.password_dict[site] = password
+        if self.password_file is not None:
+            with open(self.password_file, 'a+') as file:
+                encrypted = Fernet(self.key).encrypt(password.encode())
+                file.write(f'{site}:{encrypted.decode()}\n')
+
+    def get_password(self, site):
+        return self.passowrd_dict[site]
+
+
+def main():
+    password = {
+        "test_email": 'testPassword',
+        'test_account': 'testaccountPassword'
+    }
+    pm = PasswordManager()
+
+
+if __name__ == '__main__':
+    main()
