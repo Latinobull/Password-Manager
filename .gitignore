@@ -1,2 +1,4 @@
 passwordvenv
 thiskey.key
+database.ini
+__pycache__
